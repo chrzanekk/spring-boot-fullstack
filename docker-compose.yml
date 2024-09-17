@@ -1,7 +1,7 @@
 services:
   db:
     container_name: postgres-backend
-    image: postgres:latest
+    image: postgres:16.3
     environment:
       POSTGRES_USER: test
       POSTGRES_PASSWORD: password
