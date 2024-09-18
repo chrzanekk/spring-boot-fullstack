@@ -3,7 +3,7 @@
   "containerDefinitions": [
     {
       "name": "backend",
-      "image": "chrzanekk/backend:latest",
+      "image": "chrzanekk/backend:2024.09.18.15.21.19",
       "essential": true,
       "memory": 512,
       "portMappings": [
