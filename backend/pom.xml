@@ -11,10 +11,7 @@
     <groupId>com.kchrzanowski</groupId>
     <artifactId>backend</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <organization>
-        <name>chrzanekk</name>
-        <url>https://kchrzanowski.pl</url>
-    </organization>
+
 
     <name>backend</name>
     <description>Backend for Fullstack Java App</description>
@@ -35,6 +32,9 @@
         <java.version>21</java.version>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
+        <docker.username>chrzanekk</docker.username>
+        <docker.image.name>backend</docker.image.name>
+        <docker.image.tag/>
     </properties>
     <dependencies>
         <dependency>
@@ -172,7 +172,7 @@
                         <image>eclipse-temurin:21</image>
                     </from>
                     <to>
-                        <image>docker.io/${organization.name}/${project.artifactId}:${project.version}</image>
+                        <image>docker.io/${docker.username}/${docker.image.name}:${docker.image.tag}</image>
                         <tags>
                             <tag>latest</tag>
                         </tags>
