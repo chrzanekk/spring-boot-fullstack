@@ -31,7 +31,7 @@ jobs:
     steps:
       - name: Send Slack Message
         run: >
-          curl -X POST -H 'Content-type: application/json' 
+          curl && curl -X POST -H 'Content-type: application/json' 
           --data '
           {"text":"Deployment started :progress_bar: :fingerscrossed:"}
           '
@@ -55,7 +55,7 @@ jobs:
 
       - name: Send Slack Message
         run: >
-          curl -X POST -H 'Content-type: application/json' 
+          curl && curl -X POST -H 'Content-type: application/json' 
           --data '
           {"text":":maven: Building with Maven"}
           '
@@ -78,7 +78,7 @@ jobs:
 
       - name: Send Slack Message
         run: >
-          curl -X POST -H 'Content-type: application/json' 
+          curl && curl -X POST -H 'Content-type: application/json' 
           --data '
           {"text":":aws: Starting deployment to Elastic Beanstalk"}
           '
@@ -98,7 +98,7 @@ jobs:
 
       - name: Send Slack Message
         run: >
-          curl -X POST -H 'Content-type: application/json' 
+          curl && curl -X POST -H 'Content-type: application/json' 
           --data '
           {"text":":githubloading: Commitin to repo https://github.com/chrzanekk/spring-boot-fullstack"}
           '
@@ -114,7 +114,7 @@ jobs:
 
       - name: Send Slack Message
         run: >
-          curl -X POST -H 'Content-type: application/json' 
+          curl && curl -X POST -H 'Content-type: application/json' 
           --data '
           {"text":" Deployment and commit completed: :github_ckeck_mark: :party_blob: "}
           '
@@ -123,7 +123,7 @@ jobs:
       - name: Send Slack Message
         if: always() 
         run: >
-          curl -X POST -H 'Content-type: application/json' 
+          curl && curl -X POST -H 'Content-type: application/json' 
           --data '
           {"text":"Job Status ${{ job.status }} "}
           '
