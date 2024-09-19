@@ -125,6 +125,6 @@ jobs:
         run: >
           curl -X POST -H 'Content-type: application/json' 
           --data '
-          {"text":"Job Status ${{ job_status }} "}
+          {"text":"Job Status ${{ job.status }} "}
           '
           ${{ secrets.SLACK_WEBHOOK_URL }}     
