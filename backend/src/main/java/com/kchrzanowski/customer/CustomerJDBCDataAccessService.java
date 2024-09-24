@@ -21,7 +21,7 @@ public class CustomerJDBCDataAccessService implements CustomerDao {
     @Override
     public List<Customer> selectAllCustomers() {
         var sql = """
-                SELECT id,name,email,age
+                SELECT id,name,email,age,gender
                 FROM customer
                 """;
         return jdbcTemplate.query(sql, customerRowMapper);
@@ -30,7 +30,7 @@ public class CustomerJDBCDataAccessService implements CustomerDao {
     @Override
     public Optional<Customer> selectCustomerById(Long id) {
         var sql = """
-                SELECT id,name,email,age
+                SELECT id,name,email,age,gender
                 FROM customer
                 WHERE id = ?
                 """;
@@ -40,15 +40,17 @@ public class CustomerJDBCDataAccessService implements CustomerDao {
     @Override
     public void insertCustomer(Customer customer) {
         var sql = """
-                INSERT INTO customer(name, email, age)
-                VALUES (?, ?, ?);
+                INSERT INTO customer(name, email, age, gender)
+                VALUES (?, ?, ?, ?);
                 """;
 
         int update = jdbcTemplate.update(
                 sql,
                 customer.getName(),
                 customer.getEmail(),
-                customer.getAge());
+                customer.getAge(),
+                customer.getGender().name());
+
         System.out.println("jdbcTemplate.update: " + update);
 
     }
@@ -104,6 +106,12 @@ public class CustomerJDBCDataAccessService implements CustomerDao {
             String sql = "UPDATE customer SET email = ? WHERE id =?";
             int result = jdbcTemplate.update(sql, customer.getEmail(), customer.getId());
             System.out.println("jdbcTemplate update email: " + result);
+        }
+
+        if (customer.getGender() != null) {
+            String sql = "UPDATE customer SET gender =? WHERE id =?";
+            int result = jdbcTemplate.update(sql,customer.getGender().name(), customer.getId());
+            System.out.println("jdbcTemplate update gender: " + result);
         }
     }
 }

@@ -4,6 +4,7 @@ import com.kchrzanowski.AbstractTestcontainers;
 import com.kchrzanowski.customer.Customer;
 import com.kchrzanowski.customer.CustomerRegistrationRequest;
 import com.kchrzanowski.customer.CustomerUpdateRequest;
+import com.kchrzanowski.customer.Gender;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,7 +30,7 @@ public class CustomerIntegrationTest extends AbstractTestcontainers {
         // create registration request
         Customer fakeCustomer = AbstractTestcontainers.createFakeRandomCustomer();
         CustomerRegistrationRequest request = new CustomerRegistrationRequest(
-                fakeCustomer.getName(), fakeCustomer.getEmail(), fakeCustomer.getAge());
+                fakeCustomer.getName(), fakeCustomer.getEmail(), fakeCustomer.getAge(), fakeCustomer.getGender());
         // send post request
         webTestClient.post()
                 .uri(API_V_1_CUSTOMERS)
@@ -51,7 +52,8 @@ public class CustomerIntegrationTest extends AbstractTestcontainers {
                 .getResponseBody();
 
         // make sure that customer is present
-        assertThat(allCustomers).usingRecursiveFieldByFieldElementComparatorIgnoringFields("id")
+        assertThat(allCustomers)
+                .usingRecursiveFieldByFieldElementComparatorIgnoringFields("id")
                 .contains(fakeCustomer);
 
         // get customer by id
@@ -78,7 +80,7 @@ public class CustomerIntegrationTest extends AbstractTestcontainers {
         // create registration request
         Customer fakeCustomer = AbstractTestcontainers.createFakeRandomCustomer();
         CustomerRegistrationRequest request = new CustomerRegistrationRequest(
-                fakeCustomer.getName(), fakeCustomer.getEmail(), fakeCustomer.getAge());
+                fakeCustomer.getName(), fakeCustomer.getEmail(), fakeCustomer.getAge(), fakeCustomer.getGender());
         // send post request
         webTestClient.post()
                 .uri(API_V_1_CUSTOMERS)
@@ -125,7 +127,7 @@ public class CustomerIntegrationTest extends AbstractTestcontainers {
         // create registration request
         Customer fakeCustomer = AbstractTestcontainers.createFakeRandomCustomer();
         CustomerRegistrationRequest registrationRequest = new CustomerRegistrationRequest(
-                fakeCustomer.getName(), fakeCustomer.getEmail(), fakeCustomer.getAge());
+                fakeCustomer.getName(), fakeCustomer.getEmail(), fakeCustomer.getAge(), fakeCustomer.getGender());
         // send post request
         webTestClient.post()
                 .uri(API_V_1_CUSTOMERS)
@@ -156,7 +158,7 @@ public class CustomerIntegrationTest extends AbstractTestcontainers {
         //update customer
         String newName = "Kondzio";
         CustomerUpdateRequest updateRequest = new CustomerUpdateRequest(
-                newName, fakeCustomer.getEmail(), fakeCustomer.getAge());
+                newName, fakeCustomer.getEmail(), fakeCustomer.getAge(), fakeCustomer.getGender());
 
         webTestClient.put()
                 .uri(API_V_1_CUSTOMERS + "/{id}", id)
@@ -174,7 +176,7 @@ public class CustomerIntegrationTest extends AbstractTestcontainers {
                 .expectBody(Customer.class)
                 .returnResult().getResponseBody();
 
-        Customer expected = new Customer(id, newName, fakeCustomer.getEmail(), fakeCustomer.getAge());
+        Customer expected = new Customer(id, newName, fakeCustomer.getEmail(), fakeCustomer.getAge(), fakeCustomer.getGender());
 
         assertThat(updatedCustomer).isEqualTo(expected);
     }

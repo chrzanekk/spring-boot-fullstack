@@ -2,6 +2,7 @@ package com.kchrzanowski;
 
 import com.github.javafaker.Faker;
 import com.kchrzanowski.customer.Customer;
+import com.kchrzanowski.customer.Gender;
 import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.BeforeAll;
 import org.springframework.boot.jdbc.DataSourceBuilder;
@@ -61,9 +62,10 @@ public abstract class AbstractTestcontainers {
         var lastName = faker.name().lastName();
         var email = faker.internet().domainName();
         var age = faker.number().numberBetween(1, 50);
+        var gender = age % 2 == 0 ? Gender.MALE : Gender.FEMALE;
         return new Customer(
                 firstName + " " + lastName,
                 firstName.toLowerCase() + "." + lastName.toLowerCase() + "-" + UUID.randomUUID() + "@" + email,
-                age);
+                age, gender);
     }
 }

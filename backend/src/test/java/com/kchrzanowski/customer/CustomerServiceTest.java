@@ -73,8 +73,8 @@ class CustomerServiceTest {
         when(customerDao.existsCustomerWithEmail(customer.getEmail())).thenReturn(false);
 
         CustomerRegistrationRequest customerRegistrationRequest = new CustomerRegistrationRequest(
-                customer.getName(), customer.getEmail(), customer.getAge()
-        );
+                customer.getName(), customer.getEmail(), customer.getAge(),
+                Gender.MALE);
 
         // When
         underTest.addCustomer(customerRegistrationRequest);
@@ -86,6 +86,7 @@ class CustomerServiceTest {
         assertThat(customerCapture.getName()).isEqualTo(customerRegistrationRequest.name());
         assertThat(customerCapture.getEmail()).isEqualTo(customerRegistrationRequest.email());
         assertThat(customerCapture.getAge()).isEqualTo(customerRegistrationRequest.age());
+        assertThat(customerCapture.getGender()).isEqualTo(customerRegistrationRequest.gender());
     }
 
     @Test
@@ -97,8 +98,8 @@ class CustomerServiceTest {
         when(customerDao.existsCustomerWithEmail(customer.getEmail())).thenReturn(true);
 
         CustomerRegistrationRequest customerRegistrationRequest = new CustomerRegistrationRequest(
-                customer.getName(), customer.getEmail(), customer.getAge()
-        );
+                customer.getName(), customer.getEmail(), customer.getAge(),
+                Gender.MALE);
 
         // When
         // Then
@@ -145,7 +146,7 @@ class CustomerServiceTest {
         Customer customer = AbstractTestcontainers.createFakeRandomCustomer();
         when(customerDao.selectCustomerById(id)).thenReturn(Optional.of(customer));
         String newEmail = "test@test.pl";
-        CustomerUpdateRequest customerUpdateRequest = new CustomerUpdateRequest("Kondzio", newEmail, customer.getAge() + 12);
+        CustomerUpdateRequest customerUpdateRequest = new CustomerUpdateRequest("Kondzio", newEmail, customer.getAge() + 12, customer.getGender());
         when(customerDao.existsCustomerWithEmail(newEmail)).thenReturn(false);
         // When
         underTest.updateCustomer(id, customerUpdateRequest);
@@ -157,6 +158,7 @@ class CustomerServiceTest {
         assertThat(customerCapture.getAge()).isEqualTo(customerUpdateRequest.age());
         assertThat(customerCapture.getName()).isEqualTo(customerUpdateRequest.name());
         assertThat(customerCapture.getEmail()).isEqualTo(customerUpdateRequest.email());
+        assertThat(customerCapture.getGender()).isEqualTo(customerUpdateRequest.gender());
     }
 
     @Test
@@ -165,7 +167,7 @@ class CustomerServiceTest {
         Long id = 1L;
         Customer customer = AbstractTestcontainers.createFakeRandomCustomer();
         when(customerDao.selectCustomerById(id)).thenReturn(Optional.of(customer));
-        CustomerUpdateRequest customerUpdateRequest = new CustomerUpdateRequest("Kondzio", null, null);
+        CustomerUpdateRequest customerUpdateRequest = new CustomerUpdateRequest("Kondzio", null, null, Gender.MALE);
         // When
         underTest.updateCustomer(id, customerUpdateRequest);
 
@@ -176,6 +178,7 @@ class CustomerServiceTest {
         assertThat(customerCapture.getName()).isEqualTo(customerUpdateRequest.name());
         assertThat(customerCapture.getAge()).isEqualTo(customer.getAge());
         assertThat(customerCapture.getEmail()).isEqualTo(customer.getEmail());
+        assertThat(customerCapture.getGender()).isEqualTo(customer.getGender());
     }
 
     @Test
@@ -185,7 +188,7 @@ class CustomerServiceTest {
         Customer customer = AbstractTestcontainers.createFakeRandomCustomer();
         when(customerDao.selectCustomerById(id)).thenReturn(Optional.of(customer));
         String newEmail = "test@test.pl";
-        CustomerUpdateRequest customerUpdateRequest = new CustomerUpdateRequest(null, newEmail, null);
+        CustomerUpdateRequest customerUpdateRequest = new CustomerUpdateRequest(null, newEmail, null, Gender.MALE);
         when(customerDao.existsCustomerWithEmail(newEmail)).thenReturn(false);
 
         // When
@@ -198,6 +201,7 @@ class CustomerServiceTest {
         assertThat(customerCapture.getName()).isEqualTo(customer.getName());
         assertThat(customerCapture.getAge()).isEqualTo(customer.getAge());
         assertThat(customerCapture.getEmail()).isEqualTo(newEmail);
+        assertThat(customerCapture.getGender()).isEqualTo(customer.getGender());
     }
 
     @Test
@@ -207,7 +211,7 @@ class CustomerServiceTest {
         Customer customer = AbstractTestcontainers.createFakeRandomCustomer();
         when(customerDao.selectCustomerById(id)).thenReturn(Optional.of(customer));
         String newEmail = "test@test.pl";
-        CustomerUpdateRequest customerUpdateRequest = new CustomerUpdateRequest(null, newEmail, null);
+        CustomerUpdateRequest customerUpdateRequest = new CustomerUpdateRequest(null, newEmail, null, null);
         when(customerDao.existsCustomerWithEmail(newEmail)).thenReturn(true);
 
         // When
@@ -225,7 +229,7 @@ class CustomerServiceTest {
         Customer customer = AbstractTestcontainers.createFakeRandomCustomer();
         when(customerDao.selectCustomerById(id)).thenReturn(Optional.of(customer));
         String newEmail = "test@test.pl";
-        CustomerUpdateRequest customerUpdateRequest = new CustomerUpdateRequest(customer.getName(), customer.getEmail(), customer.getAge());
+        CustomerUpdateRequest customerUpdateRequest = new CustomerUpdateRequest(customer.getName(), customer.getEmail(), customer.getAge(), Gender.MALE);
 
         // When
         // Then
@@ -242,7 +246,7 @@ class CustomerServiceTest {
         Customer customer = AbstractTestcontainers.createFakeRandomCustomer();
         when(customerDao.selectCustomerById(id)).thenReturn(Optional.of(customer));
         int newAge = customer.getAge() + 11;
-        CustomerUpdateRequest customerUpdateRequest = new CustomerUpdateRequest(null, null, newAge);
+        CustomerUpdateRequest customerUpdateRequest = new CustomerUpdateRequest(null, null, newAge, null);
         // When
         underTest.updateCustomer(id, customerUpdateRequest);
 
@@ -253,5 +257,27 @@ class CustomerServiceTest {
         assertThat(customerCapture.getName()).isEqualTo(customer.getName());
         assertThat(customerCapture.getAge()).isEqualTo(newAge);
         assertThat(customerCapture.getEmail()).isEqualTo(customer.getEmail());
+        assertThat(customerCapture.getGender()).isEqualTo(customer.getGender());
+    }
+
+    @Test
+    void updateOnlyCustomerGender() {
+        // Given
+        Long id = 1L;
+        Customer customer = AbstractTestcontainers.createFakeRandomCustomer();
+        when(customerDao.selectCustomerById(id)).thenReturn(Optional.of(customer));
+        var newGender = customer.getGender().equals(Gender.MALE) ? Gender.FEMALE : Gender.MALE;
+        CustomerUpdateRequest customerUpdateRequest = new CustomerUpdateRequest(null, null, null, newGender);
+        // When
+        underTest.updateCustomer(id, customerUpdateRequest);
+
+        // Then
+        ArgumentCaptor<Customer> customerArgumentCaptor = ArgumentCaptor.forClass(Customer.class);
+        verify(customerDao, times(1)).updateCustomer(customerArgumentCaptor.capture());
+        Customer customerCapture = customerArgumentCaptor.getValue();
+        assertThat(customerCapture.getName()).isEqualTo(customer.getName());
+        assertThat(customerCapture.getAge()).isEqualTo(customer.getAge());
+        assertThat(customerCapture.getEmail()).isEqualTo(customer.getEmail());
+        assertThat(customerCapture.getGender()).isEqualTo(newGender);
     }
 }

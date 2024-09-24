@@ -19,6 +19,7 @@ class CustomerRowMapperTest {
         when(resultSet.getInt("age")).thenReturn(2);
         when(resultSet.getString("name")).thenReturn("John");
         when(resultSet.getString("email")).thenReturn("john@example.com");
+        when(resultSet.getString("gender")).thenReturn(Gender.MALE.name());
 
         Customer actual = customerRowMapper.mapRow(resultSet,1);
 
@@ -26,7 +27,7 @@ class CustomerRowMapperTest {
                 1L,
                 "John",
                 "john@example.com"
-                ,2);
+                ,2, Gender.MALE);
         assertThat(expected).isEqualTo(actual);
     }
 }
