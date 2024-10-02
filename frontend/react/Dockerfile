@@ -1,4 +1,4 @@
-FROM node:22
+FROM node:22-alipne
 ARG api_base_url
 WORKDIR /app
 COPY package*.json .
