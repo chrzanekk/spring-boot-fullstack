@@ -21,7 +21,7 @@
     },
     {
       "name": "frontend-react",
-      "image": "chrzanekk/frontend-react:2024.10.02.12.06.15",
+      "image": "chrzanekk/frontend-react:2024.10.02.12.12.01",
       "essential": true,
       "memory": 256,
       "portMappings": [
