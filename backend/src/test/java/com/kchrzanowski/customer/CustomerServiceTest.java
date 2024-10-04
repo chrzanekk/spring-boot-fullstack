@@ -10,6 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
@@ -22,11 +23,17 @@ class CustomerServiceTest {
 
     @Mock
     private CustomerDao customerDao;
+
+    @Mock
+    private PasswordEncoder passwordEncoder;
+
     private CustomerService underTest;
+
+    private final CustomerDTOMapper customerDTOMapper = new CustomerDTOMapper();
 
     @BeforeEach
     void setUp() {
-        underTest = new CustomerService(customerDao);
+        underTest = new CustomerService(customerDao, passwordEncoder, customerDTOMapper);
     }
 
     @Test
@@ -45,10 +52,10 @@ class CustomerServiceTest {
         when(customerDao.selectCustomerById(id)).thenReturn(Optional.of(customer));
 
         // When
-        Customer actual = underTest.getCustomer(id);
-
+        CustomerDTO actual = underTest.getCustomer(id);
+        CustomerDTO expected = customerDTOMapper.apply(customer);
         // Then
-        assertThat(actual).isEqualTo(customer);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
@@ -73,8 +80,12 @@ class CustomerServiceTest {
         when(customerDao.existsCustomerWithEmail(customer.getEmail())).thenReturn(false);
 
         CustomerRegistrationRequest customerRegistrationRequest = new CustomerRegistrationRequest(
-                customer.getName(), customer.getEmail(), customer.getAge(),
+                customer.getName(), customer.getEmail(), customer.getPassword(), customer.getAge(),
                 Gender.MALE);
+
+        String passwordHash = "21352356236264";
+
+        when(passwordEncoder.encode(customerRegistrationRequest.password())).thenReturn(passwordHash);
 
         // When
         underTest.addCustomer(customerRegistrationRequest);
@@ -87,6 +98,7 @@ class CustomerServiceTest {
         assertThat(customerCapture.getEmail()).isEqualTo(customerRegistrationRequest.email());
         assertThat(customerCapture.getAge()).isEqualTo(customerRegistrationRequest.age());
         assertThat(customerCapture.getGender()).isEqualTo(customerRegistrationRequest.gender());
+        assertThat(customerCapture.getPassword()).isEqualTo(passwordHash);
     }
 
     @Test
@@ -98,7 +110,7 @@ class CustomerServiceTest {
         when(customerDao.existsCustomerWithEmail(customer.getEmail())).thenReturn(true);
 
         CustomerRegistrationRequest customerRegistrationRequest = new CustomerRegistrationRequest(
-                customer.getName(), customer.getEmail(), customer.getAge(),
+                customer.getName(), customer.getEmail(), customer.getPassword(), customer.getAge(),
                 Gender.MALE);
 
         // When
@@ -146,7 +158,7 @@ class CustomerServiceTest {
         Customer customer = AbstractTestcontainers.createFakeRandomCustomer();
         when(customerDao.selectCustomerById(id)).thenReturn(Optional.of(customer));
         String newEmail = "test@test.pl";
-        CustomerUpdateRequest customerUpdateRequest = new CustomerUpdateRequest("Kondzio", newEmail, customer.getAge() + 12, customer.getGender());
+        CustomerUpdateRequest customerUpdateRequest = new CustomerUpdateRequest("Kondzio", newEmail, customer.getPassword(), customer.getAge() + 12, customer.getGender());
         when(customerDao.existsCustomerWithEmail(newEmail)).thenReturn(false);
         // When
         underTest.updateCustomer(id, customerUpdateRequest);
@@ -167,7 +179,7 @@ class CustomerServiceTest {
         Long id = 1L;
         Customer customer = AbstractTestcontainers.createFakeRandomCustomer();
         when(customerDao.selectCustomerById(id)).thenReturn(Optional.of(customer));
-        CustomerUpdateRequest customerUpdateRequest = new CustomerUpdateRequest("Kondzio", null, null, Gender.MALE);
+        CustomerUpdateRequest customerUpdateRequest = new CustomerUpdateRequest("Kondzio", null, null, null, null);
         // When
         underTest.updateCustomer(id, customerUpdateRequest);
 
@@ -188,7 +200,7 @@ class CustomerServiceTest {
         Customer customer = AbstractTestcontainers.createFakeRandomCustomer();
         when(customerDao.selectCustomerById(id)).thenReturn(Optional.of(customer));
         String newEmail = "test@test.pl";
-        CustomerUpdateRequest customerUpdateRequest = new CustomerUpdateRequest(null, newEmail, null, Gender.MALE);
+        CustomerUpdateRequest customerUpdateRequest = new CustomerUpdateRequest(null, newEmail, null, null, null);
         when(customerDao.existsCustomerWithEmail(newEmail)).thenReturn(false);
 
         // When
@@ -211,7 +223,7 @@ class CustomerServiceTest {
         Customer customer = AbstractTestcontainers.createFakeRandomCustomer();
         when(customerDao.selectCustomerById(id)).thenReturn(Optional.of(customer));
         String newEmail = "test@test.pl";
-        CustomerUpdateRequest customerUpdateRequest = new CustomerUpdateRequest(null, newEmail, null, null);
+        CustomerUpdateRequest customerUpdateRequest = new CustomerUpdateRequest(null, newEmail, null, null, null);
         when(customerDao.existsCustomerWithEmail(newEmail)).thenReturn(true);
 
         // When
@@ -228,8 +240,7 @@ class CustomerServiceTest {
         Long id = 1L;
         Customer customer = AbstractTestcontainers.createFakeRandomCustomer();
         when(customerDao.selectCustomerById(id)).thenReturn(Optional.of(customer));
-        String newEmail = "test@test.pl";
-        CustomerUpdateRequest customerUpdateRequest = new CustomerUpdateRequest(customer.getName(), customer.getEmail(), customer.getAge(), Gender.MALE);
+        CustomerUpdateRequest customerUpdateRequest = new CustomerUpdateRequest(customer.getName(), customer.getEmail(), customer.getPassword(), customer.getAge(), customer.getGender());
 
         // When
         // Then
@@ -246,7 +257,7 @@ class CustomerServiceTest {
         Customer customer = AbstractTestcontainers.createFakeRandomCustomer();
         when(customerDao.selectCustomerById(id)).thenReturn(Optional.of(customer));
         int newAge = customer.getAge() + 11;
-        CustomerUpdateRequest customerUpdateRequest = new CustomerUpdateRequest(null, null, newAge, null);
+        CustomerUpdateRequest customerUpdateRequest = new CustomerUpdateRequest(null, null, null, newAge, null);
         // When
         underTest.updateCustomer(id, customerUpdateRequest);
 
@@ -267,7 +278,7 @@ class CustomerServiceTest {
         Customer customer = AbstractTestcontainers.createFakeRandomCustomer();
         when(customerDao.selectCustomerById(id)).thenReturn(Optional.of(customer));
         var newGender = customer.getGender().equals(Gender.MALE) ? Gender.FEMALE : Gender.MALE;
-        CustomerUpdateRequest customerUpdateRequest = new CustomerUpdateRequest(null, null, null, newGender);
+        CustomerUpdateRequest customerUpdateRequest = new CustomerUpdateRequest(null, null, null, null, newGender);
         // When
         underTest.updateCustomer(id, customerUpdateRequest);
 

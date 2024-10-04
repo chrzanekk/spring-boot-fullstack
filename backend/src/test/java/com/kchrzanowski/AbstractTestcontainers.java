@@ -14,6 +14,7 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import javax.sql.DataSource;
+import java.util.Random;
 import java.util.UUID;
 
 @Testcontainers
@@ -61,11 +62,12 @@ public abstract class AbstractTestcontainers {
         var firstName = faker.name().firstName();
         var lastName = faker.name().lastName();
         var email = faker.internet().domainName();
+        var password = "password";
         var age = faker.number().numberBetween(1, 50);
         var gender = age % 2 == 0 ? Gender.MALE : Gender.FEMALE;
         return new Customer(
                 firstName + " " + lastName,
                 firstName.toLowerCase() + "." + lastName.toLowerCase() + "-" + UUID.randomUUID() + "@" + email,
-                age, gender);
+                password, age, gender);
     }
 }

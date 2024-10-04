@@ -4,8 +4,11 @@ server:
     include-message: always
 
 
-allowed-origins: "*"
-allowed-methods: "*"
+cors:
+  allowed-origins: "*"
+  allowed-methods: "*"
+  allowed-headers: "*"
+  exposed-headers: "*"
 
 spring:
   datasource:
@@ -20,3 +23,8 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
     show-sql: true
+
+
+jwt:
+  jwtSecret: 4jE4XcimwrEF9PUiOGaasXROjlw9zpkj5Hr59gojyiE6SMcxDBf9sJu/sCX/eazVrd+TyfYB/e8mz0NmgzuMNYmeb/Cw4aI1wOVgihSrVxT9erUXQXaGD8chY4wdWI9yaZOQKOdHcq8HTLYde3Xum34hgIMG3UJfHIfUNfL0a8Z6YiZGnuEnZrCsmMPTufN0o+pWQk5e7NI7fAgveTBvcV04oLJKK5sjky8a3N9rVPX2XZ6UOsG2n7Cvn/940dpy+DqRPBYCfagUyKNmakjAV2Desn7FkZ7dlGgsZGaWvXm3dhQ1l9TSdZTyx6QlLyaLB95pCDojfwaCYwKTEmj6
+  jwtExpirationMs: 86400000

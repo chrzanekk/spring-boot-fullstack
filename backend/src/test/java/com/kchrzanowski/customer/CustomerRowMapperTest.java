@@ -27,7 +27,7 @@ class CustomerRowMapperTest {
                 1L,
                 "John",
                 "john@example.com"
-                ,2, Gender.MALE);
+                , "password", 2, Gender.MALE);
         assertThat(expected).isEqualTo(actual);
     }
 }
