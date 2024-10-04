@@ -76,47 +76,5 @@ public class AuthenticationIntegrationTest {
         assertThat(customerDTO.age()).isEqualTo(fakeCustomer.getAge());
         assertThat(customerDTO.gender()).isEqualTo(fakeCustomer.getGender());
         assertThat(customerDTO.roles()).isEqualTo(List.of("ROLE_USER"));
-        // get all customers
-//        List<CustomerDTO> allCustomers = webTestClient.get()
-//                .uri(API_V_1_CUSTOMERS_PATH)
-//                .accept(MediaType.APPLICATION_JSON)
-//                .header(AUTHORIZATION, jwtToken)
-//                .exchange()
-//                .expectStatus().isOk()
-//                .expectBodyList(new ParameterizedTypeReference<CustomerDTO>() {
-//                })
-//                .returnResult()
-//                .getResponseBody();
-//
-//        // make sure that customer is present
-//        // get customer by id
-//        Long id = allCustomers.stream()
-//                .filter(customer -> customer.email().equals(fakeCustomer.getEmail()))
-//                .map(CustomerDTO::id)
-//                .findFirst()
-//                .orElseThrow();
-//
-//        CustomerDTO expectedCustomer = new CustomerDTO(
-//                id,
-//                fakeCustomer.getName(),
-//                fakeCustomer.getEmail(),
-//                fakeCustomer.getGender(),
-//                fakeCustomer.getAge(),
-//                List.of("ROLE_USER"),
-//                fakeCustomer.getUsername());
-//        assertThat(allCustomers)
-//                .usingRecursiveFieldByFieldElementComparatorIgnoringFields("id")
-//                .contains(expectedCustomer);
-//
-//
-//        webTestClient.get()
-//                .uri(API_V_1_CUSTOMERS_PATH + "/{id}", id)
-//                .accept(MediaType.APPLICATION_JSON)
-//                .header(AUTHORIZATION, jwtToken)
-//                .exchange()
-//                .expectStatus().isOk()
-//                .expectBody(new ParameterizedTypeReference<CustomerDTO>() {
-//                })
-//                .isEqualTo(expectedCustomer);
     }
 }
