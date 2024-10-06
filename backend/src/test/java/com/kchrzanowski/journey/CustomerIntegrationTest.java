@@ -1,7 +1,10 @@
 package com.kchrzanowski.journey;
 
 import com.kchrzanowski.AbstractTestcontainers;
-import com.kchrzanowski.customer.*;
+import com.kchrzanowski.customer.Customer;
+import com.kchrzanowski.customer.CustomerDTO;
+import com.kchrzanowski.customer.CustomerRegistrationRequest;
+import com.kchrzanowski.customer.CustomerUpdateRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -46,7 +49,7 @@ public class CustomerIntegrationTest extends AbstractTestcontainers {
         List<CustomerDTO> allCustomers = webTestClient.get()
                 .uri(API_V_1_CUSTOMERS_PATH)
                 .accept(MediaType.APPLICATION_JSON)
-                .header(AUTHORIZATION, jwtToken)
+                .header(AUTHORIZATION, "Bearer " + jwtToken)
                 .exchange()
                 .expectStatus().isOk()
                 .expectBodyList(new ParameterizedTypeReference<CustomerDTO>() {
@@ -78,7 +81,7 @@ public class CustomerIntegrationTest extends AbstractTestcontainers {
         webTestClient.get()
                 .uri(API_V_1_CUSTOMERS_PATH + "/{id}", id)
                 .accept(MediaType.APPLICATION_JSON)
-                .header(AUTHORIZATION, jwtToken)
+                .header(AUTHORIZATION, "Bearer " + jwtToken)
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(new ParameterizedTypeReference<CustomerDTO>() {
@@ -95,8 +98,8 @@ public class CustomerIntegrationTest extends AbstractTestcontainers {
         CustomerRegistrationRequest request = new CustomerRegistrationRequest(
                 fakeCustomer.getName(), fakeCustomer.getEmail(), fakeCustomer.getPassword(), fakeCustomer.getAge(), fakeCustomer.getGender());
 
-         CustomerRegistrationRequest requestToDelete = new CustomerRegistrationRequest(
-                 fakeCustomerToDelete.getName(), fakeCustomerToDelete.getEmail(), fakeCustomerToDelete.getPassword(), fakeCustomerToDelete.getAge(), fakeCustomerToDelete.getGender());
+        CustomerRegistrationRequest requestToDelete = new CustomerRegistrationRequest(
+                fakeCustomerToDelete.getName(), fakeCustomerToDelete.getEmail(), fakeCustomerToDelete.getPassword(), fakeCustomerToDelete.getAge(), fakeCustomerToDelete.getGender());
         // send post request
         String jwtToken = webTestClient.post()
                 .uri(API_V_1_CUSTOMERS_PATH)
@@ -121,7 +124,7 @@ public class CustomerIntegrationTest extends AbstractTestcontainers {
         List<Customer> allCustomers = webTestClient.get()
                 .uri(API_V_1_CUSTOMERS_PATH)
                 .accept(MediaType.APPLICATION_JSON)
-                .header(AUTHORIZATION, jwtToken)
+                .header(AUTHORIZATION, "Bearer " + jwtToken)
                 .exchange()
                 .expectStatus().isOk()
                 .expectBodyList(new ParameterizedTypeReference<Customer>() {
@@ -140,14 +143,14 @@ public class CustomerIntegrationTest extends AbstractTestcontainers {
         webTestClient.delete()
                 .uri(API_V_1_CUSTOMERS_PATH + "/{id}", id)
                 .accept(MediaType.APPLICATION_JSON)
-                .header(AUTHORIZATION, jwtToken)
+                .header(AUTHORIZATION, "Bearer " + jwtToken)
                 .exchange()
                 .expectStatus().isOk();
 
         webTestClient.get()
                 .uri(API_V_1_CUSTOMERS_PATH + "/{id}", id)
                 .accept(MediaType.APPLICATION_JSON)
-                .header(AUTHORIZATION, jwtToken)
+                .header(AUTHORIZATION, "Bearer " + jwtToken)
                 .exchange()
                 .expectStatus().isNotFound();
     }
@@ -175,7 +178,7 @@ public class CustomerIntegrationTest extends AbstractTestcontainers {
         List<Customer> allCustomers = webTestClient.get()
                 .uri(API_V_1_CUSTOMERS_PATH)
                 .accept(MediaType.APPLICATION_JSON)
-                .header(AUTHORIZATION, jwtToken)
+                .header(AUTHORIZATION, "Bearer " + jwtToken)
                 .exchange()
                 .expectStatus().isOk()
                 .expectBodyList(new ParameterizedTypeReference<Customer>() {
@@ -199,7 +202,7 @@ public class CustomerIntegrationTest extends AbstractTestcontainers {
                 .uri(API_V_1_CUSTOMERS_PATH + "/{id}", id)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
-                .header(AUTHORIZATION, jwtToken)
+                .header(AUTHORIZATION, "Bearer " + jwtToken)
                 .body(Mono.just(updateRequest), CustomerUpdateRequest.class)
                 .exchange()
                 .expectStatus().isOk();
@@ -207,7 +210,7 @@ public class CustomerIntegrationTest extends AbstractTestcontainers {
         CustomerDTO updatedCustomer = webTestClient.get()
                 .uri(API_V_1_CUSTOMERS_PATH + "/{id}", id)
                 .accept(MediaType.APPLICATION_JSON)
-                .header(AUTHORIZATION, jwtToken)
+                .header(AUTHORIZATION, "Bearer " + jwtToken)
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(CustomerDTO.class)
