@@ -33,7 +33,7 @@ public class CustomerController {
     public ResponseEntity<?> createCustomer(@RequestBody CustomerRegistrationRequest customerRegistrationRequest) {
         customerService.addCustomer(customerRegistrationRequest);
         String token = jwtUtil.issueToken(customerRegistrationRequest.email(), "ROLE_USER");
-        return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION, "Bearer " + token).build();
+        return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION, token).build();
     }
 
     @DeleteMapping("/{customerId}")

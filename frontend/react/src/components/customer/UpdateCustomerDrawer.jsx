@@ -9,7 +9,7 @@ import {
     DrawerOverlay,
     useDisclosure
 } from "@chakra-ui/react"
-import CreateCustomerForm from "./CreateCustomerForm.jsx";
+import CreateCustomerForm from "../shared/CreateCustomerForm.jsx";
 import UpdateCustomerForm from "./UpdateCustomerForm.jsx";
 import React from "react";
 

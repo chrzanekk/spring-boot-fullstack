@@ -8,7 +8,7 @@ export const AuthProvider = ({children}) => {
 
     const [customer, setCustomer] = useState(null);
 
-    useEffect(() =>{
+    const setCustomerFromToken = () => {
         let token = localStorage.getItem("auth");
         if(token) {
             let decodedToken = jwtDecode(token);
@@ -17,6 +17,10 @@ export const AuthProvider = ({children}) => {
                 roles: decodedToken.scopes
             })
         }
+    }
+
+    useEffect(() => {
+        setCustomerFromToken();
     },[])
 
     const login = async (usernameAndPassword) => {
@@ -59,7 +63,8 @@ export const AuthProvider = ({children}) => {
             customer,
             login,
             logOut,
-            isAuthenticated
+            isAuthenticated,
+            setCustomerFromToken
         }}>
             {children}
         </AuthContext.Provider>
