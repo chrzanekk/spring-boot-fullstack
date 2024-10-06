@@ -10,6 +10,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootApplication
@@ -19,17 +20,26 @@ public class Main {
         SpringApplication.run(Main.class, args);
     }
 
-//    @Bean
-//    CommandLineRunner runner(CustomerService customerService) {
-//        return args -> {
+    @Bean
+    CommandLineRunner runner(CustomerService customerService) {
+        return args -> {
+            List<CustomerRegistrationRequest> customerRegistrationRequests = new ArrayList<>();
 //            CustomerRegistrationRequest customer = createRandomCustomerRegistrationRequest();
+//            customerRegistrationRequests.add(customer);
 //            CustomerRegistrationRequest customer2 = createRandomCustomerRegistrationRequest();
+//            customerRegistrationRequests.add(customer2);
 //            CustomerRegistrationRequest customer3 = createRandomCustomerRegistrationRequest();
+//            customerRegistrationRequests.add(customer3);
 //            CustomerRegistrationRequest customer4 = createRandomCustomerRegistrationRequest();
-//            List<CustomerRegistrationRequest> list = List.of(customer, customer2, customer3, customer4);
-//            list.forEach(customerService::addCustomer);
-//        };
-//    }
+//            customerRegistrationRequests.add(customer4);
+
+            customerRegistrationRequests.forEach(customerRegistrationRequest -> {
+                customerService.addCustomer(customerRegistrationRequest);
+                System.out.println(customerRegistrationRequest.email());
+                System.out.println(customerRegistrationRequest.password());
+            });
+        };
+    }
 
     private static CustomerRegistrationRequest createRandomCustomerRegistrationRequest() {
         Faker faker = new Faker();

@@ -3,16 +3,34 @@ import {createRoot} from 'react-dom/client'
 import App from './App.jsx'
 import './index.css'
 import {ChakraProvider, createStandaloneToast} from '@chakra-ui/react'
-
+import {createBrowserRouter, RouterProvider} from "react-router-dom";
+import Login from "./components/login/Login.jsx";
+import { AuthProvider } from "./components/context/AuthContext.jsx"
+import ProtectedRoute from "./components/shared/ProtectedRoute.jsx";
 
 const {ToastContainer} = createStandaloneToast()
+const router = createBrowserRouter([
+    {
+        path: "/",
+        element: <Login />
+    },
+    {
+        path: "dashboard",
+        element:<ProtectedRoute>
+            <App />
+        </ProtectedRoute>
+    }
+
+])
 
 createRoot(document.getElementById('root'))
     .render(
     <StrictMode>
         <ChakraProvider>
-            <App/>
-            <ToastContainer/>
+            <AuthProvider>
+                <RouterProvider router={ router } />
+            </AuthProvider>
+            <ToastContainer />
         </ChakraProvider>
     </StrictMode>
 )

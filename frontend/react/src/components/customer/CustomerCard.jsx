@@ -21,8 +21,8 @@ import {
     useDisclosure,
 } from '@chakra-ui/react'
 import React from "react";
-import {deleteCustomer} from "../services/client.js";
-import {errorNotification, successNotification} from "../services/Notification.js";
+import {deleteCustomer} from "../../services/Client.js";
+import {errorNotification, successNotification} from "../../services/Notification.js";
 import UpdateCustomerDrawer from "./UpdateCustomerDrawer.jsx";
 
 export default function CardWithImage({id, name, email, age, gender, imageNumber, fetchCustomers}) {

@@ -1,8 +1,8 @@
 import {Form, Formik, useField} from 'formik';
 import * as Yup from 'yup';
 import {Alert, AlertIcon, Box, Button, FormLabel, Input, Select, Stack} from "@chakra-ui/react";
-import {saveCustomer} from "../services/client.js";
-import {errorNotification, successNotification} from "../services/Notification.js";
+import {saveCustomer} from "../../services/Client.js";
+import {errorNotification, successNotification} from "../../services/Notification.js";
 
 const MyTextInput = ({label, ...props}) => {
     const [field, meta] = useField(props);
@@ -44,6 +44,7 @@ const CreateCustomerForm = ({fetchCustomers}) => {
                     name: '',
                     email: '',
                     age: 0,
+                    password: '',
                     gender: '',
                 }}
                 validationSchema={Yup.object({
@@ -57,6 +58,10 @@ const CreateCustomerForm = ({fetchCustomers}) => {
                         .min(16, 'Must be at least 16 years of age')
                         .max(200, 'Must be less than 200 years of age')
                         .required(),
+                    password: Yup.string()
+                        .min(4, 'Must be 4 characters or more')
+                        .max(10, 'Must be 10 characters or less')
+                        .required('Required'),
                     gender: Yup.string()
                         .oneOf(
                             ['MALE', 'FEMALE'],
@@ -106,6 +111,12 @@ const CreateCustomerForm = ({fetchCustomers}) => {
                                 name="age"
                                 type="number"
                                 placeholder="16"
+                            />
+                            <MyTextInput
+                                label="Password"
+                                name="password"
+                                type="password"
+                                placeholder="pick a secure password"
                             />
 
                             <MySelect label="Gender" name="gender">

@@ -10,6 +10,7 @@ import {
     HStack,
     Icon,
     IconButton,
+    Image,
     Menu,
     MenuButton,
     MenuDivider,
@@ -18,10 +19,10 @@ import {
     Text,
     useColorModeValue,
     useDisclosure,
-    VStack,
-    Image
+    VStack
 } from '@chakra-ui/react'
 import {FiBell, FiChevronDown, FiCompass, FiHome, FiMenu, FiSettings, FiStar, FiTrendingUp,} from 'react-icons/fi'
+import {useAuth} from "../context/AuthContext.jsx";
 
 
 const LinkItems = [
@@ -43,14 +44,15 @@ const SidebarContent = ({onClose, ...rest}) => {
             pos="fixed"
             h="full"
             {...rest}>
-            <Flex h="20" flexDirection="column" alignItems="center" mx="8" mb={25} mt={2} justifyContent="space-between">
+            <Flex h="20" flexDirection="column" alignItems="center" mx="8" mb={75} mt={2}
+                  justifyContent="space-between">
                 <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold" bm={5}>
                     Dashboard
                 </Text>
                 <Image
                     borderRadius='full'
-                    boxSize='50px'
-                    src='https://randomuser.me/api/portraits/med/men/71.jpg'
+                    boxSize='100px'
+                    src='/img/logo-round.png'
                     alt='Kondzio Czanosky'
                 />
                 <CloseButton display={{base: 'flex', md: 'none'}} onClick={onClose}/>
@@ -100,6 +102,7 @@ const NavItem = ({icon, children, ...rest}) => {
 }
 
 const MobileNav = ({onOpen, ...rest}) => {
+    const {logOut, customer} = useAuth();
     return (
         <Flex
             ml={{base: 0, md: 60}}
@@ -144,10 +147,12 @@ const MobileNav = ({onOpen, ...rest}) => {
                                     alignItems="flex-start"
                                     spacing="1px"
                                     ml="2">
-                                    <Text fontSize="sm">Justina Clark</Text>
-                                    <Text fontSize="xs" color="gray.600">
-                                        Admin
-                                    </Text>
+                                    <Text fontSize="sm">{customer?.username}</Text>
+                                    {customer?.roles.map((role, id) => (
+                                        <Text key={id} fontSize="xs" color="gray.600">
+                                            {role}
+                                        </Text>
+                                    ))}
                                 </VStack>
                                 <Box display={{base: 'none', md: 'flex'}}>
                                     <FiChevronDown/>
@@ -161,7 +166,9 @@ const MobileNav = ({onOpen, ...rest}) => {
                             <MenuItem>Settings</MenuItem>
                             <MenuItem>Billing</MenuItem>
                             <MenuDivider/>
-                            <MenuItem>Sign out</MenuItem>
+                            <MenuItem onClick={logOut}>
+                                Logout
+                            </MenuItem>
                         </MenuList>
                     </Menu>
                 </Flex>
@@ -170,7 +177,7 @@ const MobileNav = ({onOpen, ...rest}) => {
     )
 }
 
-export default function SidebarWithHeader ({children}) {
+export default function SidebarWithHeader({children}) {
     const {isOpen, onOpen, onClose} = useDisclosure()
 
     return (
