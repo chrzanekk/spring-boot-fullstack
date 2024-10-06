@@ -99,6 +99,7 @@ jobs:
           region: ${{ secrets.EB_REGION }}
           deployment_package: Dockerrun.aws.json
           wait_for_environment_recovery: 120
+        continue-on-error: ${{ matrix.attempt != 3 }}
 
 #      todo fix this in future if needed
 #      - name: Send Slack Message
