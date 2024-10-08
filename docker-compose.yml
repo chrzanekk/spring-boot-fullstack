@@ -21,8 +21,8 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/customer
       SPRING_DATASOURCE_USERNAME: test
       SPRING_DATASOURCE_PASSWORD: password
-    ports:
-      - "8080:8080"
+    expose:
+      - "8080"
     networks:
       - db
     depends_on:
@@ -34,9 +34,9 @@ services:
     build:
       context: frontend/react
       args:
-        api_base_url: http://localhost:8080
-    ports:
-      - "3000:5173"
+        api_base_url: http://backend-api:8080
+    expose:
+      - "80"
     depends_on:
       - backend-api
     restart: unless-stopped
