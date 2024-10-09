@@ -9,6 +9,7 @@ import com.kchrzanowski.customer.CustomerRegistrationRequest;
 import com.kchrzanowski.jwt.JWTUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
@@ -23,7 +24,8 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @SpringBootTest(webEnvironment = RANDOM_PORT)
-public class AuthenticationIntegrationTest {
+@AutoConfigureWebTestClient
+public class AuthenticationIntegrationTest extends AbstractTestcontainers {
 
     public static final String API_V_1_AUTH_PATH = "/api/v1/auth";
     public static final String API_V_1_CUSTOMERS_PATH = "/api/v1/customers";

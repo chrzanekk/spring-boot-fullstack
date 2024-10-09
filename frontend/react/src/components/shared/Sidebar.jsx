@@ -81,7 +81,7 @@ const NavItem = ({icon, children, ...rest}) => {
                 role="group"
                 cursor="pointer"
                 _hover={{
-                    bg: 'red.600',
+                    bg: 'purple.600',
                     color: 'white',
                 }}
                 {...rest}>
