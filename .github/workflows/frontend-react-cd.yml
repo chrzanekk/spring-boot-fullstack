@@ -103,7 +103,7 @@ jobs:
         uses: appleboy/scp-action@v0.1.7
         with:
           source: "docker-compose.yml"
-          target: "/user/debian/app"
+          target: "/home/debian/app"
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
@@ -117,7 +117,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.VPS_PORT }}
           script: |
-            cd /user/debian/app
+            cd /home/debian/app
             docker-compose down
             docker pull ${{ secrets.DOCKER_USERNAME }}/frontend-react:latest
             docker-compose up -d
