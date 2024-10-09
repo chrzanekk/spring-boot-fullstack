@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   db:
     container_name: postgres-backend
@@ -5,45 +7,51 @@ services:
     environment:
       POSTGRES_USER: test
       POSTGRES_PASSWORD: password
-      PGDATA: /data/postgres
+      POSTGRES_DB: customer
+#      PGDATA: /data/postgres
     volumes:
-      - db:/data/postgres
+#      - db:/data/postgres
+      - db-data:/var/lib/postgresql/data
     ports:
       - "5444:5432"
     networks:
-      - db
+      - app-network
     restart: unless-stopped
 
   backend-api:
-    container_name: backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
     image: chrzanekk/backend:latest
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/customer
       SPRING_DATASOURCE_USERNAME: test
       SPRING_DATASOURCE_PASSWORD: password
-    expose:
-      - "8080"
+    ports:
+      - "8080:8080"
     networks:
-      - db
+      - app-network
     depends_on:
       - db
 
   frontend-react:
-    container_name: frontend-react
-    image: chrzanekk/frontend-react
     build:
       context: frontend/react
+      dockerfile: Dockerfile
       args:
         api_base_url: http://backend-api:8080
-    expose:
-      - "80"
+    image: chrzanekk/frontend-react
+    ports:
+      - "3000:5173"
+    networks:
+      - app-network
     depends_on:
       - backend-api
     restart: unless-stopped
 
 networks:
-  db:
-    driver: bridge
+  app-network:
+#    driver: bridge
 
 volumes:
-  db:
+  db-data:
