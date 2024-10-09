@@ -17,10 +17,10 @@ services:
     restart: unless-stopped
 
   backend-api:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-#    image: chrzanekk/backend:latest
+#    build:
+#      context: ./backend
+#      dockerfile: Dockerfile
+    image: chrzanekk/backend:latest
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/customer
       SPRING_DATASOURCE_USERNAME: test
