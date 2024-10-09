@@ -186,10 +186,6 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build and Push Docker Image
-        working-directory: ./backend
-        env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: |
           mvn clean install
           docker build -t ${{ secrets.DOCKER_USERNAME }}/backend:latest .
