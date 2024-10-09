@@ -1,3 +1,70 @@
+#name: CD - Deploy React Frontend
+#
+#on:
+#  workflow_dispatch:
+#  push:
+#    branches:
+#      - main
+#    paths:
+#      - frontend/react/**
+#
+#jobs:
+#  deploy:
+#    runs-on: ubuntu-latest
+#    defaults:
+#      run:
+#        working-directory: ./frontend/react
+#
+#    steps:
+#      - uses: actions/checkout@v4
+#
+#      - name: Set build number
+#        id: build-number
+#        run: echo "BUILD_NUMBER=$(date '+%Y.%m.%d.%H.%M.%S')" >> $GITHUB_OUTPUT
+#
+#      - name: Login to Docker Hub
+#        uses: docker/login-action@v2
+#        with:
+#          username: ${{ secrets.DOCKER_USERNAME }}
+#          password: ${{ secrets.DOCKER_PASSWORD }}
+#      - name: Docker Build and push
+#        run: |
+#          chmod +x ../../.ci/build-publish.sh
+#          USERNAME=chrzanekk \
+#          REPO=frontend-react \
+#          TAG=${{ steps.build-number.outputs.BUILD_NUMBER }} \
+#          ../../.ci/build-publish.sh . \
+#          --build-arg api_base_url=http://backend-env.eba-axnv9mjq.eu-central-1.elasticbeanstalk.com:8080
+#
+#      - name: Update Dockerrun.aws.json react image tag with new build number
+#        run: |
+#          echo "Dockerrun.aws.json before updating tag"
+#          cat ../../Dockerrun.aws.json
+#          sed -i -E 's_(chrzanekk/frontend-react:)([^"]*)_\1'${{steps.build-number.outputs.BUILD_NUMBER}}'_' ../../Dockerrun.aws.json
+#          echo "Dockerrun.aws.json after updating tag"
+#          cat ../../Dockerrun.aws.json
+#
+#      - name: Deploy to Elastic Beanstalk
+#        uses: einaregilsson/beanstalk-deploy@v22
+#        with:
+#          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#          aws_secret_key: ${{ secrets.AWS_SECRET_KEY_ID }}
+#          application_name: ${{ secrets.EB_APPLICATION_NAME }}
+#          environment_name: ${{ secrets.EB_ENVIRONMENT_NAME }}
+#          version_label: ${{ steps.build-number.outputs.BUILD_NUMBER }}
+#          version_description: ${{ github.SHA }}
+#          region: ${{ secrets.EB_REGION }}
+#          deployment_package: Dockerrun.aws.json
+#          wait_for_environment_recovery: 60
+#
+#      - name: Commit and push Dockerrun.aws.json
+#        run: |
+#          git config user.name github-actions
+#          git config user.email github-actions@github.com
+#          git add ../../Dockerrun.aws.json
+#          git commit -m "Update Dockerrun.aws.json docker image with new tag ${{ steps.build-number.outputs.BUILD_NUMBER }}"
+#          git push
+
 name: CD - Deploy React Frontend
 
 on:
@@ -9,10 +76,14 @@ on:
       - frontend/react/**
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend/react
+
     steps:
-      - name: Checkout Code
+      - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Login to Docker Hub
@@ -28,22 +99,25 @@ jobs:
             --build-arg VITE_API_BASE_URL=${{ secrets.VITE_API_BASE_URL }} .
           docker push ${{ secrets.DOCKER_USERNAME }}/frontend-react:latest
 
-      - name: Upload docker-compose.yml to VPS
+      - name: Copy docker-compose.yml to VPS
         uses: appleboy/scp-action@v0.1.7
         with:
+          source: "docker-compose.yml"
+          target: "/user/debian/app"
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.VPS_SSH_KEY }}
-          source: ./docker-compose.yml
-          target: /home/debian/app
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.VPS_PORT }}
 
-      - name: SSH into VPS and Deploy Frontend
+      - name: SSH to VPS and Deploy Frontend
         uses: appleboy/ssh-action@v0.1.7
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.VPS_SSH_KEY }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.VPS_PORT }}
           script: |
-            cd /home/debian/app
-            docker-compose pull frontend-react
-            docker-compose up -d frontend-react
+            cd /user/debian/app
+            docker-compose down
+            docker pull ${{ secrets.DOCKER_USERNAME }}/frontend-react:latest
+            docker-compose up -d
