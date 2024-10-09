@@ -196,7 +196,7 @@ jobs:
         uses: appleboy/scp-action@v0.1.7
         with:
           source: "docker-compose.yml"
-          target: "/user/debian/testapp/backend"
+          target: "/user/debian/testapp"
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
@@ -209,7 +209,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.VPS_PORT }}
           script: |
-            cd /user/debian/testapp/backend
+            cd /user/debian/testapp
             docker-compose down
             docker pull chrzanekk/backend:${{ steps.build-number.outputs.BUILD_NUMBER }}
-            docker-compose up -d
+            docker-compose up -d db backend-api
