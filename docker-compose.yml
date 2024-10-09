@@ -20,7 +20,7 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    image: chrzanekk/backend:latest
+#    image: chrzanekk/backend:latest
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/customer
       SPRING_DATASOURCE_USERNAME: test
@@ -34,12 +34,12 @@ services:
     restart: unless-stopped
 
   frontend-react:
-#    image: chrzanekk/frontend-react
-    build:
-      context: ./frontend/react
-      dockerfile: Dockerfile
-      args:
-        api_base_url: http://backend-api:8080
+    image: chrzanekk/frontend-react
+#    build:
+#      context: ./frontend/react
+#      dockerfile: Dockerfile
+#      args:
+#        api_base_url: http://backend-api:8080
     ports:
       - "3000:5173"
     depends_on:
