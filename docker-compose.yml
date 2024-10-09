@@ -36,7 +36,7 @@ services:
   frontend-react:
     image: chrzanekk/frontend-react
     build:
-      context: ./frontend/react
+#      context: ./frontend/react
       dockerfile: Dockerfile
       args:
         api_base_url: http://backend-api:8080
