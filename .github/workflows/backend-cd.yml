@@ -211,6 +211,6 @@ jobs:
           port: ${{ secrets.VPS_PORT }}
           script: |
             cd /home/debian/app
-            docker-compose down backend-api
+            docker-compose down
             docker pull ${{ secrets.DOCKER_USERNAME }}/backend:latest
-            docker-compose up -d backend-api
+            docker-compose up -d

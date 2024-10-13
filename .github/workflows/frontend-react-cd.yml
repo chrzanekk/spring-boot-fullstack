@@ -118,6 +118,6 @@ jobs:
           port: ${{ secrets.VPS_PORT }}
           script: |
             cd /home/debian/app
-            docker-compose down frontend-react
+            docker-compose down
             docker pull ${{ secrets.DOCKER_USERNAME }}/frontend-react:latest
-            docker-compose up -d frondend-react
+            docker-compose up -d
