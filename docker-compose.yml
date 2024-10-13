@@ -29,7 +29,7 @@ services:
     restart: unless-stopped
 
   frontend-react:
-    image: chrzanekk/frontend-react
+    image: chrzanekk/frontend-react:latest
     ports:
       - "3000:5173"
     depends_on:
