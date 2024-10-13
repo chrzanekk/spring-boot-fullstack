@@ -6,9 +6,7 @@ services:
       POSTGRES_USER: test
       POSTGRES_PASSWORD: password
       POSTGRES_DB: customer
-#      PGDATA: /data/postgres
     volumes:
-#      - db:/data/postgres
       - db-data:/var/lib/postgresql/data
     ports:
       - "5444:5432"
@@ -17,9 +15,6 @@ services:
     restart: unless-stopped
 
   backend-api:
-#    build:
-#      context: ./backend
-#      dockerfile: Dockerfile
     image: chrzanekk/backend:latest
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/customer
@@ -35,11 +30,6 @@ services:
 
   frontend-react:
     image: chrzanekk/frontend-react
-#    build:
-#      context: ./frontend/react
-#      dockerfile: Dockerfile
-#      args:
-#        api_base_url: http://backend-api:8080
     ports:
       - "3000:5173"
     depends_on:
@@ -50,7 +40,7 @@ services:
 
 networks:
   app-network:
-#    driver: bridge
+    driver: bridge
 
 volumes:
   db-data:
