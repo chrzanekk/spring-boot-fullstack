@@ -40,7 +40,7 @@ services:
 
 networks:
   app-network:
-    driver: bridge
+#    driver: bridge
 
 volumes:
   db-data:
