@@ -38,6 +38,7 @@ export const updateCustomer = async (id, update) => {
     }
 }
 
+
 export const deleteCustomer = async (id) => {
     try {
         return await axios.delete(

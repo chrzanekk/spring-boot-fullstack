@@ -18,6 +18,7 @@ services:
 
   backend-api:
     image: chrzanekk/backend:latest
+    container_name: backend-api
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/customer
       SPRING_DATASOURCE_USERNAME: test
@@ -32,8 +33,9 @@ services:
 
   frontend-react:
     image: chrzanekk/frontend-react:latest
+    container_name: frontend-react
     ports:
-      - "5173:5173"
+      - "80:5173"
     depends_on:
       - backend-api
     networks:
