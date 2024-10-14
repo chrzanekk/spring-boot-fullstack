@@ -1,5 +1,10 @@
 import axios from 'axios'
 
+
+const api = axios.create({
+    baseURL: import.meta.env.VITE_API_BASE_URL,
+});
+
 const getAuthConfig = () => ({
     headers: {
         Authorization: `Bearer ${localStorage.getItem("auth")}`
@@ -8,7 +13,7 @@ const getAuthConfig = () => ({
 
 export const getCustomers = async () => {
     try {
-        return await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/v1/customers`,
+        return await api.get(`${import.meta.env.VITE_API_BASE_URL}/api/v1/customers`,
             getAuthConfig()
         )
     } catch (e) {
@@ -19,7 +24,7 @@ export const getCustomers = async () => {
 export const saveCustomer = async (customer) => {
     try {
         console.log(`url to backend: ${import.meta.env.VITE_API_BASE_URL}`)
-        return await axios.post(
+        return await api.post(
             `${import.meta.env.VITE_API_BASE_URL}/api/v1/customers`,
             customer
         )
@@ -30,7 +35,7 @@ export const saveCustomer = async (customer) => {
 
 export const updateCustomer = async (id, update) => {
     try {
-        return await axios.put(
+        return await api.put(
             `${import.meta.env.VITE_API_BASE_URL}/api/v1/customers/${id}`,
             update,
             getAuthConfig()
@@ -42,7 +47,7 @@ export const updateCustomer = async (id, update) => {
 
 export const deleteCustomer = async (id) => {
     try {
-        return await axios.delete(
+        return await api.delete(
             `${import.meta.env.VITE_API_BASE_URL}/api/v1/customers/${id}`,
             getAuthConfig()
         )
@@ -53,7 +58,7 @@ export const deleteCustomer = async (id) => {
 
 export const login = async (usernameAndPassword) => {
     try {
-        return await axios.post(
+        return await api.post(
             `${import.meta.env.VITE_API_BASE_URL}/api/v1/auth/login`,
             usernameAndPassword
         )
