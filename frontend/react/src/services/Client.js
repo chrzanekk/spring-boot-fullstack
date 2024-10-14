@@ -18,6 +18,7 @@ export const getCustomers = async () => {
 
 export const saveCustomer = async (customer) => {
     try {
+        console.log("url to backend: " `${import.meta.env.VITE_API_BASE_URL}`)
         return await axios.post(
             `${import.meta.env.VITE_API_BASE_URL}/api/v1/customers`,
             customer
