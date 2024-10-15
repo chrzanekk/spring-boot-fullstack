@@ -213,4 +213,4 @@ jobs:
             cd /home/debian/app
             docker-compose down
             docker pull ${{ secrets.DOCKER_USERNAME }}/backend:latest
-            docker-compose up -d
+            docker-compose up -d --remove-orphans
