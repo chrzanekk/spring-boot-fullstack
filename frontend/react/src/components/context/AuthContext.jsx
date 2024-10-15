@@ -4,7 +4,6 @@ import {jwtDecode} from "jwt-decode";
 
 const AuthContext = createContext({});
 
-
 export const AuthProvider = ({children}) => {
 
     const [customer, setCustomer] = useState(null);
