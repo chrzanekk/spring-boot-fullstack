@@ -20,26 +20,26 @@ public class Main {
         SpringApplication.run(Main.class, args);
     }
 
-//    @Bean
-//    CommandLineRunner runner(CustomerService customerService) {
-//        return args -> {
-//            List<CustomerRegistrationRequest> customerRegistrationRequests = new ArrayList<>();
-//            CustomerRegistrationRequest customer = createRandomCustomerRegistrationRequest();
-//            customerRegistrationRequests.add(customer);
-//            CustomerRegistrationRequest customer2 = createRandomCustomerRegistrationRequest();
-//            customerRegistrationRequests.add(customer2);
-//            CustomerRegistrationRequest customer3 = createRandomCustomerRegistrationRequest();
-//            customerRegistrationRequests.add(customer3);
-//            CustomerRegistrationRequest customer4 = createRandomCustomerRegistrationRequest();
-//            customerRegistrationRequests.add(customer4);
+    @Bean
+    CommandLineRunner runner(CustomerService customerService) {
+        return args -> {
+            List<CustomerRegistrationRequest> customerRegistrationRequests = new ArrayList<>();
+            CustomerRegistrationRequest customer = createRandomCustomerRegistrationRequest();
+            customerRegistrationRequests.add(customer);
+            CustomerRegistrationRequest customer2 = createRandomCustomerRegistrationRequest();
+            customerRegistrationRequests.add(customer2);
+            CustomerRegistrationRequest customer3 = createRandomCustomerRegistrationRequest();
+            customerRegistrationRequests.add(customer3);
+            CustomerRegistrationRequest customer4 = createRandomCustomerRegistrationRequest();
+            customerRegistrationRequests.add(customer4);
 
-//            customerRegistrationRequests.forEach(customerRegistrationRequest -> {
-//                customerService.addCustomer(customerRegistrationRequest);
-//                System.out.println(customerRegistrationRequest.email());
-//                System.out.println(customerRegistrationRequest.password());
-//            });
-//        };
-//    }
+            customerRegistrationRequests.forEach(customerRegistrationRequest -> {
+                customerService.addCustomer(customerRegistrationRequest);
+                System.out.println(customerRegistrationRequest.email());
+                System.out.println(customerRegistrationRequest.password());
+            });
+        };
+    }
 
     private static CustomerRegistrationRequest createRandomCustomerRegistrationRequest() {
         Faker faker = new Faker();
