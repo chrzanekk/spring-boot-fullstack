@@ -1,8 +1,8 @@
 import {useAuth} from "../context/AuthContext.jsx";
-import {useNavigate} from "react-router-dom";
+import { useNavigate} from "react-router-dom";
 import {useEffect} from "react";
-import {Flex, Image, Link, Stack, Text} from "@chakra-ui/react";
-import CreateCustomerForm from "../shared/CreateCustomerForm.jsx";
+import {Flex, Image, Stack, Text, Link} from "@chakra-ui/react";
+import RegisterForm from "../shared/RegisterForm.jsx";
 
 const Register = () => {
     const {customer, setCustomerFromToken} = useAuth();
@@ -15,11 +15,13 @@ const Register = () => {
     })
 
     return (
+
         <Stack minH={'100vh'} direction={{base: 'column', md: 'row'}}>
             <Flex p={8} flex={1} align={'center'} justify={'center'}>
+
                 <Stack spacing={4} w={'full'} maxW={'md'}>
 
-                    <CreateCustomerForm onSuccess={(token) => {
+                    <RegisterForm onSuccess={(token) => {
                         localStorage.setItem("auth", token)
                         setCustomerFromToken();
                         navigate("/dashboard");
@@ -32,16 +34,16 @@ const Register = () => {
             </Flex>
             <Flex flex={1}
                   p={10}
-                  flexDirection={'column'}
+                  flexDirection='column'
                   alignItems={'center'}
                   justifyContent={'center'}
                   bgGradient={{sm: 'linear(to-r,blue.200,purple.600)'}}>
                 <Text fontSize={"6xl"} color={'white'} fontWeight={'bold'} mb={5}>
-                        TEST ENVIRONMENT
+                    TEST ENVIRONMENT
                 </Text>
                 <Image
                     alt={'Login Image'}
-                    objectFit={"scale-down"}
+                    objectFit='scale-down'
                     src={
                         '/img/logo.jpg'
                     }

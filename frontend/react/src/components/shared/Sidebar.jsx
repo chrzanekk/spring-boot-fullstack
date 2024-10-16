@@ -10,7 +10,8 @@ import {
     HStack,
     Icon,
     IconButton,
-    Image, Link,
+    Image,
+    Link as ChakraLink,
     Menu,
     MenuButton,
     MenuDivider,
@@ -23,7 +24,7 @@ import {
 } from '@chakra-ui/react'
 import {FiBell, FiChevronDown, FiCompass, FiHome, FiMenu, FiSettings, FiStar, FiTrendingUp,} from 'react-icons/fi'
 import {useAuth} from "../context/AuthContext.jsx";
-import {NavLink} from "react-router-dom";
+import {Link, NavLink} from "react-router-dom";
 
 
 const LinkItems = [
@@ -69,10 +70,10 @@ const SidebarContent = ({onClose, ...rest}) => {
 
 const NavItem = ({icon, children, path, ...rest}) => {
     return (
-        <Box as={NavLink} to={path || "#"}
+        <Box as={NavLink} to={path}
             // href="#"
-            style={{textDecoration: 'none'}}
-            _focus={{boxShadow: 'none'}}>
+             style={{textDecoration: 'none'}}
+             _focus={{boxShadow: 'none'}}>
             <Flex
                 align="center"
                 p="4"
@@ -81,7 +82,7 @@ const NavItem = ({icon, children, path, ...rest}) => {
                 role="group"
                 cursor="pointer"
                 _hover={{
-                    bg: 'red.600',
+                    bg: 'purple.600',
                     color: 'white',
                 }}
                 {...rest}>
@@ -162,11 +163,11 @@ const MobileNav = ({onOpen, ...rest}) => {
                         <MenuList
                             bg={useColorModeValue('white', 'gray.900')}
                             borderColor={useColorModeValue('gray.200', 'gray.700')}>
-                            <Link to="/profile">
+                            <ChakraLink as={Link} to="/profile">
                                 <MenuItem>
                                     Profile
                                 </MenuItem>
-                            </Link>
+                            </ChakraLink>
                             <MenuItem>Settings</MenuItem>
                             <MenuItem>Billing</MenuItem>
                             <MenuDivider/>

@@ -66,7 +66,7 @@ const LoginForm = () => {
                             />
                         </Box>
                         <Box display="flex" justifyContent="center">
-                            <Heading fontSize={'2xl'} mb={15}>Sign in to your account</Heading>
+                            <Heading fontSize={'2xl'} mb={15}>Login your account</Heading>
                         </Box>
                         <MyTextInput
                             label={"Email"}

@@ -1,6 +1,6 @@
 'use client'
 
-import {Alert, AlertIcon, Box, Flex, FormLabel, Image, Input, Link, Stack, Text,} from '@chakra-ui/react'
+import {Alert, AlertIcon, Box, Flex, FormLabel, Image, Input, Link, Stack, Text} from '@chakra-ui/react'
 import {useField} from "formik";
 import {useAuth} from "../context/AuthContext.jsx";
 import {useNavigate} from "react-router-dom";
@@ -39,7 +39,7 @@ const Login = () => {
             <Flex p={8} flex={1} align={'center'} justify={'center'}>
                 <Stack spacing={4} w={'full'} maxW={'md'}>
                     <LoginForm/>
-                    <Link color={"purple.600"} href={'/register'} align={'center'}>
+                    <Link color={"blue.600"} href={'/register'} align={'center'}>
                         Dont have an account? Register now
                     </Link>
                 </Stack>
@@ -55,7 +55,7 @@ const Login = () => {
                 </Text>
                 <Image
                     alt={'Login Image'}
-                    objectFit={"scale-down"}
+                    objectFit="scale-down"
                     src={
                         '/img/logo.jpg'
                     }
