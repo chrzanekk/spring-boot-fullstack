@@ -25,7 +25,7 @@ import {deleteCustomer} from "../../services/Client.js";
 import {errorNotification, successNotification} from "../../services/Notification.js";
 import UpdateCustomerDrawer from "./UpdateCustomerDrawer.jsx";
 
-export default function CardWithImage({id, name, email, age, gender, imageNumber, fetchCustomers}) {
+export default function CardWithImage({id, name, email, age, gender, fetchCustomers}) {
 
     const {isOpen, onOpen, onClose} = useDisclosure()
     const cancelRef = React.useRef()
@@ -55,7 +55,7 @@ export default function CardWithImage({id, name, email, age, gender, imageNumber
                     <Avatar
                         size={'xl'}
                         src={
-                            `https://randomuser.me/api/portraits/${randomUserGender}/${imageNumber}.jpg`
+                            `https://randomuser.me/api/portraits/${randomUserGender}/${id}.jpg`
                         }
                         css={{
                             border: '2px solid white',
@@ -73,7 +73,7 @@ export default function CardWithImage({id, name, email, age, gender, imageNumber
                         <Text color={'gray.500'}>Age {age} | {gender}</Text>
                     </Stack>
                 </Box>
-                <Stack direction={"row"} justify={'center'} spacing={6} p={4}>
+                <Stack direction={["row"]} justify={'center'} spacing={6} p={4}>
                     <Stack>
                         <UpdateCustomerDrawer
                             initialValues={{name, email, age}}

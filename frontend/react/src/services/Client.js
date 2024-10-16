@@ -67,3 +67,11 @@ export const login = async (usernameAndPassword) => {
     }
 }
 
+export const getCustomerByEmail = async (email) => {
+    try {
+        return await api.get(`api/v1/customers/email/${email}`, getAuthConfig());
+    } catch (e) {
+        throw e;
+    }
+}
+

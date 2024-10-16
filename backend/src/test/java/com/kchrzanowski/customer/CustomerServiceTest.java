@@ -45,7 +45,7 @@ class CustomerServiceTest {
     }
 
     @Test
-    void canGetCustomer() {
+    void canGetCustomerById() {
         // Given
         Long id = 1L;
         Customer customer = AbstractTestcontainers.createFakeRandomCustomer();
@@ -53,6 +53,20 @@ class CustomerServiceTest {
 
         // When
         CustomerDTO actual = underTest.getCustomer(id);
+        CustomerDTO expected = customerDTOMapper.apply(customer);
+        // Then
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    void canGetCustomerByEmail() {
+        // Given
+        Customer customer = AbstractTestcontainers.createFakeRandomCustomer();
+        String email = customer.getEmail();
+        when(customerDao.selectCustomerByEmail(email)).thenReturn(Optional.of(customer));
+
+        // When
+        CustomerDTO actual = underTest.getCustomer(email);
         CustomerDTO expected = customerDTOMapper.apply(customer);
         // Then
         assertThat(actual).isEqualTo(expected);
@@ -69,6 +83,19 @@ class CustomerServiceTest {
         assertThatThrownBy(() -> underTest.getCustomer(id))
                 .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessage("Customer with id [%s] not found.".formatted(id));
+    }
+
+    @Test
+    void throwExceptionWhenCustomerDoesNotExistWithEmail() {
+        // Given
+        String email = "email@email.com";
+        when(customerDao.selectCustomerByEmail(email)).thenReturn(Optional.empty());
+
+        // When
+        // Then
+        assertThatThrownBy(() -> underTest.getCustomer(email))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessage("Customer with email [%s] not found.".formatted(email));
     }
 
     @Test

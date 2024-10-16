@@ -23,23 +23,6 @@ export const AuthProvider = ({children}) => {
         setCustomerFromToken();
     },[])
 
-    // const login = async (usernameAndPassword) => {
-    //     return new Promise((resolve, reject) => {
-    //         performLogin(usernameAndPassword).then(res => {
-    //             const jwtToken = res.headers["authorization"];
-    //             localStorage.setItem("auth", jwtToken)
-    //             const decodedToken = jwtDecode(jwtToken);
-    //             setCustomer({
-    //                 username: decodedToken.sub,
-    //                 roles: decodedToken.scopes
-    //             })
-    //             resolve(res);
-    //         }).catch(err => {
-    //             reject(err);
-    //         })
-    //     })
-    // }
-
     const login = async (usernameAndPassword) => {
         try {
             const res = await performLogin(usernameAndPassword);

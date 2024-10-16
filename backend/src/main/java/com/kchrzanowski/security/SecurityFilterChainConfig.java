@@ -28,6 +28,8 @@ public class SecurityFilterChainConfig {
         this.authenticationEntryPoint = authenticationEntryPoint;
     }
 
+    //todo extend authorizationHttpRequests for other endpoints
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http

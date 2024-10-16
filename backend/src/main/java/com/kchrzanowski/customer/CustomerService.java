@@ -35,6 +35,12 @@ public class CustomerService {
                 .orElseThrow(() -> new ResourceNotFoundException("Customer with id [%s] not found.".formatted(id)));
     }
 
+    public CustomerDTO getCustomer(String email) {
+        return customerDao.selectCustomerByEmail(email)
+                .map(customerDTOMapper)
+                .orElseThrow(() -> new ResourceNotFoundException("Customer with email [%s] not found.".formatted(email)));
+    }
+
     public void addCustomer(CustomerRegistrationRequest customerRegistrationRequest) {
         if (customerDao.existsCustomerWithEmail(customerRegistrationRequest.email())) {
             throw new DuplicateResourceException("Email already exists");
