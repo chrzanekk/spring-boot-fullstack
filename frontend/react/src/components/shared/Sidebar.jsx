@@ -11,7 +11,6 @@ import {
     Icon,
     IconButton,
     Image,
-    Link as ChakraLink,
     Menu,
     MenuButton,
     MenuDivider,
@@ -25,6 +24,8 @@ import {
 import {FiBell, FiChevronDown, FiCompass, FiHome, FiMenu, FiSettings, FiStar, FiTrendingUp,} from 'react-icons/fi'
 import {useAuth} from "../context/AuthContext.jsx";
 import {Link, NavLink} from "react-router-dom";
+import {getUser} from "../hooks/getUser.jsx";
+import React from "react";
 
 
 const LinkItems = [
@@ -71,7 +72,6 @@ const SidebarContent = ({onClose, ...rest}) => {
 const NavItem = ({icon, children, path, ...rest}) => {
     return (
         <Box as={NavLink} to={path}
-            // href="#"
              style={{textDecoration: 'none'}}
              _focus={{boxShadow: 'none'}}>
             <Flex
@@ -104,6 +104,10 @@ const NavItem = ({icon, children, path, ...rest}) => {
 
 const MobileNav = ({onOpen, ...rest}) => {
     const {logOut, customer} = useAuth();
+    const user = getUser();
+    if (!user) return <Text>Loading...</Text>;
+    const { id, name, email, age, gender} = user;
+    const randomUserGender = gender === "MALE" ? "men" : "women";
     return (
         <Flex
             ml={{base: 0, md: 60}}
@@ -140,7 +144,7 @@ const MobileNav = ({onOpen, ...rest}) => {
                                 <Avatar
                                     size={'sm'}
                                     src={
-                                        'https://images.unsplash.com/photo-1619946794135-5bc917a27793?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9'
+                                        `https://randomuser.me/api/portraits/${randomUserGender}/${id}.jpg`
                                     }
                                 />
                                 <VStack
@@ -148,7 +152,7 @@ const MobileNav = ({onOpen, ...rest}) => {
                                     alignItems="flex-start"
                                     spacing="1px"
                                     ml="2">
-                                    <Text fontSize="sm">{customer?.username}</Text>
+                                    <Text fontSize="md">{customer?.username}</Text>
                                     {customer?.roles.map((role, id) => (
                                         <Text key={id} fontSize="xs" color="gray.600">
                                             {role}
@@ -163,11 +167,11 @@ const MobileNav = ({onOpen, ...rest}) => {
                         <MenuList
                             bg={useColorModeValue('white', 'gray.900')}
                             borderColor={useColorModeValue('gray.200', 'gray.700')}>
-                            <ChakraLink as={Link} to="/profile">
+                            <Box as={Link} to="/profile">
                                 <MenuItem>
                                     Profile
                                 </MenuItem>
-                            </ChakraLink>
+                            </Box>
                             <MenuItem>Settings</MenuItem>
                             <MenuItem>Billing</MenuItem>
                             <MenuDivider/>

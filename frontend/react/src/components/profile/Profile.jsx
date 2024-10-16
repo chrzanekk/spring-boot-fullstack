@@ -1,47 +1,16 @@
 'use client'
 
-import {
-    Avatar,
-    Box,
-    Center,
-    Flex,
-    Heading,
-    Image,
-    Stack,
-    Tag,
-    Text,
-    useColorModeValue,
-    useDisclosure,
-} from '@chakra-ui/react'
-import React, {useEffect, useState} from "react";
+import {Avatar, Box, Center, Flex, Heading, Image, Stack, Tag, Text, useColorModeValue,} from '@chakra-ui/react'
+import React from "react";
 import UpdateProfileForm from "./UpdateProfile.jsx";
 import SidebarWithHeader from "../shared/Sidebar.jsx";
-import {jwtDecode} from "jwt-decode";
-import {getCustomerByEmail} from "../../services/Client.js";
-import {errorNotification} from "../../services/Notification.js";
+import {getUser} from "../hooks/getUser.jsx";
 
 export default function Profile() {
-    const [user, setUser] = useState(null);
-
-    useEffect(() =>{
-        const token = localStorage.getItem("auth");
-        if(token) {
-            const decodedToken = jwtDecode(token);
-            const email = decodedToken.sub;
-            getCustomerByEmail(email).then(response => {
-                setUser(response.data)
-            }).catch(err => {
-                console.log(err);
-                errorNotification(
-                    err.code,
-                    err.response.data.message
-                )
-            });
-        }
-    },[]);
+    const user = getUser();
 
     if (!user) return <Text>Loading...</Text>;
-    const { id, name, email, age, gender} = user;
+    const {id, name, email, age, gender} = user;
 
     const randomUserGender = gender === "MALE" ? "men" : "women";
     return (
