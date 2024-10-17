@@ -9,6 +9,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Service
 public class AuthenticationService {
 
@@ -32,7 +35,14 @@ public class AuthenticationService {
         );
         Customer principal = (Customer) authenticated.getPrincipal();
         CustomerDTO customerDTO = customerDTOMapper.apply(principal);
-        String token = jwtUtil.issueToken(customerDTO.username(), customerDTO.roles());
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("id", customerDTO.id());
+        claims.put("name", customerDTO.name());
+        claims.put("email", customerDTO.email());
+        claims.put("scopes", customerDTO.roles());
+        claims.put("gender", customerDTO.gender());
+        claims.put("age", customerDTO.age());
+        String token = jwtUtil.issueToken(customerDTO.username(), claims);
         return new AuthenticationResponse(token, customerDTO);
     }
 }

@@ -12,11 +12,20 @@ export const AuthProvider = ({children}) => {
         let token = localStorage.getItem("auth");
         if(token) {
             let decodedToken = jwtDecode(token);
-            setCustomer({
-                username: decodedToken.sub,
-                roles: decodedToken.scopes
-            })
+            setCustomerData(decodedToken);
         }
+    }
+
+    const setCustomerData = (decodedToken) => {
+        setCustomer({
+            id: decodedToken.id,
+            name: decodedToken.name,
+            email: decodedToken.email,
+            age: decodedToken.age,
+            gender: decodedToken.gender,
+            username: decodedToken.sub,
+            roles: decodedToken.scopes
+        })
     }
 
     useEffect(() => {
@@ -35,10 +44,7 @@ export const AuthProvider = ({children}) => {
             localStorage.setItem("auth", jwtToken);
 
             const decodedToken = jwtDecode(jwtToken);
-            setCustomer({
-                username: decodedToken.sub,
-                roles: decodedToken.scopes
-            });
+            setCustomerData(decodedToken);
 
             return res;
         } catch (err) {

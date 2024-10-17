@@ -104,9 +104,8 @@ const NavItem = ({icon, children, path, ...rest}) => {
 
 const MobileNav = ({onOpen, ...rest}) => {
     const {logOut, customer} = useAuth();
-    const user = getUser();
-    if (!user) return <Text>Loading...</Text>;
-    const { id, name, email, age, gender} = user;
+
+    const { id, name, email, age, gender} = customer;
     const randomUserGender = gender === "MALE" ? "men" : "women";
     return (
         <Flex
@@ -144,7 +143,7 @@ const MobileNav = ({onOpen, ...rest}) => {
                                 <Avatar
                                     size={'sm'}
                                     src={
-                                        `https://randomuser.me/api/portraits/${randomUserGender}/${id}.jpg`
+                                        `https://randomuser.me/api/portraits/${randomUserGender}/${customer?.id}.jpg`
                                     }
                                 />
                                 <VStack
@@ -152,7 +151,7 @@ const MobileNav = ({onOpen, ...rest}) => {
                                     alignItems="flex-start"
                                     spacing="1px"
                                     ml="2">
-                                    <Text fontSize="md">{customer?.username}</Text>
+                                    <Text fontSize="md">{customer?.name}</Text>
                                     {customer?.roles.map((role, id) => (
                                         <Text key={id} fontSize="xs" color="gray.600">
                                             {role}
