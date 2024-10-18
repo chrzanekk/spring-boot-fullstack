@@ -1,4 +1,4 @@
-import {useAuth} from "../context/AuthContext.jsx";
+import {useAuth} from "../../contexts/AuthContext.jsx";
 import {useNavigate} from "react-router-dom";
 import {Form, Formik, useField} from "formik";
 import * as Yup from "yup";

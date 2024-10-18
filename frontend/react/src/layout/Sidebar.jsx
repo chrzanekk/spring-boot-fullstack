@@ -22,9 +22,8 @@ import {
     VStack
 } from '@chakra-ui/react'
 import {FiBell, FiChevronDown, FiCompass, FiHome, FiMenu, FiSettings, FiStar, FiTrendingUp,} from 'react-icons/fi'
-import {useAuth} from "../context/AuthContext.jsx";
+import {useAuth} from "../contexts/AuthContext.jsx";
 import {Link, NavLink} from "react-router-dom";
-import {getUser} from "../hooks/getUser.jsx";
 import React from "react";
 
 
@@ -37,6 +36,7 @@ const LinkItems = [
 ]
 
 const SidebarContent = ({onClose, ...rest}) => {
+
     return (
         <Box
             transition="3s ease"
@@ -105,7 +105,7 @@ const NavItem = ({icon, children, path, ...rest}) => {
 const MobileNav = ({onOpen, ...rest}) => {
     const {logOut, customer} = useAuth();
 
-    const { id, name, email, age, gender} = customer;
+    const {id, name, email, age, gender} = customer || {};
     const randomUserGender = gender === "MALE" ? "men" : "women";
     return (
         <Flex
@@ -143,7 +143,7 @@ const MobileNav = ({onOpen, ...rest}) => {
                                 <Avatar
                                     size={'sm'}
                                     src={
-                                        `https://randomuser.me/api/portraits/${randomUserGender}/${customer?.id}.jpg`
+                                        `https://randomuser.me/api/portraits/${randomUserGender}/${id}.jpg`
                                     }
                                 />
                                 <VStack
@@ -151,7 +151,7 @@ const MobileNav = ({onOpen, ...rest}) => {
                                     alignItems="flex-start"
                                     spacing="1px"
                                     ml="2">
-                                    <Text fontSize="md">{customer?.name}</Text>
+                                    <Text fontSize="md">{name}</Text>
                                     {customer?.roles.map((role, id) => (
                                         <Text key={id} fontSize="xs" color="gray.600">
                                             {role}
@@ -187,7 +187,7 @@ const MobileNav = ({onOpen, ...rest}) => {
 
 export default function SidebarWithHeader({children}) {
     const {isOpen, onOpen, onClose} = useDisclosure()
-
+    const {customer} = useAuth();
     return (
         <Box minH="100vh" bg={useColorModeValue('gray.100', 'gray.900')}>
             <SidebarContent onClose={() => onClose} display={{base: 'none', md: 'block'}}/>
@@ -203,7 +203,7 @@ export default function SidebarWithHeader({children}) {
                 </DrawerContent>
             </Drawer>
             {/* mobilenav */}
-            <MobileNav onOpen={onOpen}/>
+            <MobileNav onOpen={onOpen} customer={customer}/>
             <Box ml={{base: 0, md: 60}} p="4">
                 {children}
             </Box>

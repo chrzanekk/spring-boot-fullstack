@@ -1,5 +1,5 @@
 import {createContext, useContext, useEffect, useState} from "react";
-import {login as performLogin} from "../../services/Client.js";
+import {login as performLogin} from "../services/Client.js";
 import {jwtDecode} from "jwt-decode";
 
 const AuthContext = createContext({});
@@ -10,14 +10,14 @@ export const AuthProvider = ({children}) => {
 
     const setCustomerFromToken = () => {
         let token = localStorage.getItem("auth");
-        if(token) {
+        if (token) {
             let decodedToken = jwtDecode(token);
             setCustomerData(decodedToken);
         }
     }
 
     const setCustomerData = (decodedToken) => {
-        setCustomer({
+        const customerData = {
             id: decodedToken.id,
             name: decodedToken.name,
             email: decodedToken.email,
@@ -25,12 +25,32 @@ export const AuthProvider = ({children}) => {
             gender: decodedToken.gender,
             username: decodedToken.sub,
             roles: decodedToken.scopes
-        })
+        };
+        setCustomer(customerData);
+        localStorage.removeItem("customer")
+        localStorage.setItem("customer", JSON.stringify(customerData));
     }
 
+
+    const updateCustomerData = (updatedData) => {
+        const newCustomer = {
+            ...customer,
+            ...updatedData
+        };
+        setCustomer(newCustomer);
+        localStorage.removeItem("customer")
+        localStorage.setItem("customer", JSON.stringify(newCustomer));
+    };
+
     useEffect(() => {
-        setCustomerFromToken();
-    },[])
+        const storedCustomer = JSON.parse(localStorage.getItem("customer"));
+        if (storedCustomer) {
+            setCustomer(storedCustomer);
+        } else {
+            setCustomerFromToken();
+        }
+    }, []);
+
 
     const login = async (usernameAndPassword) => {
         try {
@@ -45,16 +65,19 @@ export const AuthProvider = ({children}) => {
 
             const decodedToken = jwtDecode(jwtToken);
             setCustomerData(decodedToken);
+            localStorage.removeItem("customer")
+            localStorage.setItem("customer", JSON.stringify(decodedToken));
 
             return res;
         } catch (err) {
             console.error("Login error:", err);
-            throw err;  // This rethrows the error so it can be handled by the caller
+            throw err;
         }
     };
 
     const logOut = () => {
         localStorage.removeItem("auth");
+        localStorage.removeItem("customer");
         setCustomer(null);
     }
 
@@ -77,7 +100,9 @@ export const AuthProvider = ({children}) => {
             login,
             logOut,
             isAuthenticated,
-            setCustomerFromToken
+            setCustomerFromToken,
+            updateCustomerData,
+            setCustomerData
         }}>
             {children}
         </AuthContext.Provider>

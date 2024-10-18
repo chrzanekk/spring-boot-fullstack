@@ -1,7 +1,7 @@
 import {createBrowserRouter} from "react-router-dom";
 import Login from "../components/login/Login.jsx";
 import Register from "../components/register/Register.jsx";
-import ProtectedRoute from "../components/shared/ProtectedRoute.jsx";
+import ProtectedRoute from "./ProtectedRoute.jsx";
 import App from "../App.jsx";
 import Profile from "../components/profile/Profile.jsx";
 

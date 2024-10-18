@@ -3,8 +3,8 @@ import {createRoot} from 'react-dom/client'
 import './index.css'
 import {ChakraProvider, createStandaloneToast} from '@chakra-ui/react'
 import {RouterProvider} from "react-router-dom";
-import {AuthProvider} from "./components/context/AuthContext.jsx"
-import router from './services/router.jsx'
+import {AuthProvider} from "./contexts/AuthContext.jsx"
+import router from './routes/router.jsx'
 
 const {ToastContainer} = createStandaloneToast()
 

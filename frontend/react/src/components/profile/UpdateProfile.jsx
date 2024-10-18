@@ -4,6 +4,7 @@ import {Alert, AlertIcon, Box, Button, FormLabel, Input, Stack} from "@chakra-ui
 import {updateCustomer} from "../../services/Client.js";
 import {errorNotification, successNotification} from "../../services/Notification.js";
 import {useNavigate} from "react-router-dom";
+import {useAuth} from "../../contexts/AuthContext.jsx";
 
 const MyTextInput = ({label, ...props}) => {
     const [field, meta] = useField(props);
@@ -22,6 +23,8 @@ const MyTextInput = ({label, ...props}) => {
 
 const UpdateProfileForm = ({initialValues, customerId}) => {
     const navigate = useNavigate();
+    const {updateCustomerData} = useAuth();
+
     return (
         <>
             <Formik
@@ -43,6 +46,8 @@ const UpdateProfileForm = ({initialValues, customerId}) => {
                                 "Profile updated",
                                 `${updatedCustomer.name} was successfully updated`
                             )
+                            console.log("Customer to update: ", updatedCustomer);
+                            updateCustomerData(updatedCustomer);
                             navigate("/dashboard")
                         })
                         .catch(err => {
@@ -71,7 +76,7 @@ const UpdateProfileForm = ({initialValues, customerId}) => {
                                 type="number"
                                 placeholder="age"
                             />
-                            <Button isDisabled={!(isValid && dirty)|| isSubmitting} type="submit">Update</Button>
+                            <Button isDisabled={!(isValid && dirty) || isSubmitting} type="submit">Update</Button>
                         </Stack>
                     </Form>
                 )}

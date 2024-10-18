@@ -1,6 +1,6 @@
 import {Spinner, Text, Wrap, WrapItem} from '@chakra-ui/react'
 import React, {useEffect, useState} from "react";
-import SidebarWithHeader from "./components/shared/Sidebar.jsx";
+import SidebarWithHeader from "./layout/Sidebar.jsx";
 import {getCustomers} from "./services/Client.js";
 import CardWithImage from "./components/customer/CustomerCard.jsx";
 import CreateCustomerDrawer from "./components/customer/CreateCustomerDrawer.jsx";

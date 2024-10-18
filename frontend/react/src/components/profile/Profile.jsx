@@ -3,10 +3,11 @@
 import {Avatar, Box, Center, Flex, Heading, Image, Stack, Tag, Text, useColorModeValue,} from '@chakra-ui/react'
 import React from "react";
 import UpdateProfileForm from "./UpdateProfile.jsx";
-import SidebarWithHeader from "../shared/Sidebar.jsx";
-import {getUser} from "../hooks/getUser.jsx";
+import SidebarWithHeader from "../../layout/Sidebar.jsx";
+import {getUser} from "../../hooks/getUser.jsx";
 
 export default function Profile() {
+
     const user = getUser();
 
     if (!user) return <Text>Loading...</Text>;
@@ -59,7 +60,7 @@ export default function Profile() {
                     <Stack direction={"row"} justify={'center'} spacing={6} p={4}>
                         <Stack>
                             <UpdateProfileForm
-                                initialValues={{name, age}}
+                                initialValues={{name,age}}
                                 customerId={id}
                             />
                         </Stack>

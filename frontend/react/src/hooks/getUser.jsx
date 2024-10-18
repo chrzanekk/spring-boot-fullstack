@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import {jwtDecode} from "jwt-decode";
-import {getCustomerByEmail} from "../../services/Client.js";
-import {errorNotification} from "../../services/Notification.js";
+import {getCustomerByEmail} from "../services/Client.js";
+import {errorNotification} from "../services/Notification.js";
 
 export const getUser = () => {
     const [user, setUser] = useState(null);

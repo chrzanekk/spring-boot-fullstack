@@ -1,7 +1,7 @@
 'use client'
 
 import {Flex, Image, Link, Stack, Text} from '@chakra-ui/react'
-import {useAuth} from "../context/AuthContext.jsx";
+import {useAuth} from "../../contexts/AuthContext.jsx";
 import {useNavigate} from "react-router-dom";
 import {useEffect} from "react";
 import LoginForm from "./LoginForm.jsx";

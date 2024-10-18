@@ -44,6 +44,7 @@ const UpdateCustomerForm = ({fetchCustomers, initialValues, customerId}) => {
                                 "Customer updated",
                                 `${updatedCustomer.name} was successfully updated`
                             )
+                            //todo validate if id is equal with current logged user and update context
                             fetchCustomers()
                         })
                         .catch(err => {
